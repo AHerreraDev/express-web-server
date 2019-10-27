@@ -1,15 +1,26 @@
 const app = require('express')();
-const PORT = process.env.PORT || 8080;
+const morgan = require('morgan');
+
+/* Define Middleware
+** @param 'short': Short description in the output log
+*/
+app.use(morgan(('short')));
+
 
 app.get('/', (req,res) => {
     res
-    .send('Express server running!')
     .status(200)
-    .end()
+    .send('Express server running!')
 });
 
+
+app.use(((req,res) => {
+    res.status(404).send(`URI \'${req.url}\', not found!`)
+}));
+
+const PORT = process.env.PORT || 80;
 app.listen(PORT, () => {
     console.info(`Server running on port: ${PORT}`)
-    console.info('Press CTRL+C to quit')
+    console.info('Press CTRL+C to exit')
 });
 
